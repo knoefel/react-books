@@ -9,6 +9,8 @@ describe("BookListContainer", () => {
   beforeEach(() => (booklistContainer = shallow(<BookListContainer />)));
 
   it("should render a <BookList />", () => {
-    expect(booklistContainer).toContainReact(<BookList books={[]} />);
+    expect(booklistContainer).toContainReact(
+      <BookList updateBook={() => {}} books={[]} />
+    );
   });
 });
