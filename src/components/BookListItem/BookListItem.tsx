@@ -1,22 +1,17 @@
-import {
-  Avatar,
-  IconButton,
-  ListItem,
-  ListItemAvatar,
-  ListItemSecondaryAction,
-  ListItemText
-} from "@material-ui/core";
+import { Avatar, IconButton, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import React, { FC } from "react";
-import BookResource from "../../resources/BookResource";
+import { BookListItemProps } from "./model";
 
-const BookListItem: FC<{ book: BookResource; className: string; onClickEdit }> = ({
+const BookListItem: FC<BookListItemProps> = ({
   book,
   className,
-  onClickEdit
+  onClickEdit,
+  onClickDelete
 }) => {
   const handleClickEdit = () => onClickEdit(book);
+  const handleClickDelete = () => onClickDelete(book);
 
   return (
     <ListItem classes={{ container: className }} button>
@@ -28,7 +23,7 @@ const BookListItem: FC<{ book: BookResource; className: string; onClickEdit }> =
         <IconButton onClick={handleClickEdit} edge="end" aria-label="edit">
           <EditIcon />
         </IconButton>
-        <IconButton edge="end" aria-label="delete">
+        <IconButton onClick={handleClickDelete} edge="end" aria-label="delete">
           <DeleteIcon />
         </IconButton>
       </ListItemSecondaryAction>

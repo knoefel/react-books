@@ -22,4 +22,3 @@ const applyKeysTransform = (obj: any | any[], transformFn) =>
 
 const mapKeysToCamelCase = mapKeys(camelCase);
 const mapKeysToSnakeCase = mapKeys(snakeCase);
-
