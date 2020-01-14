@@ -1,4 +1,4 @@
-import { camelCase, mapKeys } from "lodash/fp";
+import { camelCase, isArray, mapKeys, snakeCase } from "lodash/fp";
 import { Method, Resource } from "rest-hooks";
 
 export abstract class CamelCaseResource extends Resource {
@@ -7,12 +7,19 @@ export abstract class CamelCaseResource extends Resource {
     url: string,
     body?: Readonly<object | string>
   ) {
-    //TODO implement the inverse operation for keys (camelCase to snakeCase) when sending data back to the server
+    if (body) {
+      body = applyKeysTransform(body, mapKeysToSnakeCase);
+    }
 
     const jsonResponse = await super.fetch(method, url, body);
 
-    return jsonResponse.map(mapKeysToCamelCase);
+    return applyKeysTransform(jsonResponse, mapKeysToCamelCase);
   }
 }
 
+const applyKeysTransform = (obj: any | any[], transformFn) =>
+  isArray(obj) ? obj.map(transformFn) : transformFn(obj);
+
 const mapKeysToCamelCase = mapKeys(camelCase);
+const mapKeysToSnakeCase = mapKeys(snakeCase);
+
