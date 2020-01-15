@@ -3,12 +3,10 @@ import React, { FC, useState } from "react";
 import BookResource from "../../resources/BookResource";
 import BookListItem from "../BookListItem/BookListItem";
 import EditBook from "../EditBook/EditBook";
+import { BookListProps } from "./model";
 import { useStyles } from "./styles";
 
-const BookList: FC<{ books: BookResource[]; updateBook }> = ({
-  books,
-  updateBook
-}) => {
+const BookList: FC<BookListProps> = ({ books, updateBook, deleteBook }) => {
   const classes = useStyles();
 
   const [showEditBook, setShowEditBook] = useState(false);
@@ -18,6 +16,8 @@ const BookList: FC<{ books: BookResource[]; updateBook }> = ({
     setShowEditBook(true);
     setEditBook(book);
   };
+  const onClickDelete = (book: BookResource) => deleteBook(book);
+
   const onEdit = (book: BookResource) => {
     updateBook(book);
 
@@ -38,6 +38,7 @@ const BookList: FC<{ books: BookResource[]; updateBook }> = ({
             key={book.pk()}
             book={book}
             onClickEdit={onClickEdit}
+            onClickDelete={onClickDelete}
           ></BookListItem>
         ))}
       </List>

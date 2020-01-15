@@ -1,16 +1,24 @@
 import { TextField } from "@material-ui/core";
 import { entries } from "lodash/fp";
-import React, { useEffect } from "react";
+import React, { FC, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { BookFormProps } from "./model";
 
-export function BookForm({ onChange, isValid, initialValues }) {
+const BookForm: FC<BookFormProps> = ({
+  onChange,
+  isValid,
+  initialValues = {}
+}) => {
   const { id, ...defaultValues } = initialValues;
   const { register, formState, getValues } = useForm({
     defaultValues,
     mode: "onChange"
   });
 
-  // setup validation using custom register -> https://github.com/react-hook-form/react-hook-form/issues/404#issuecomment-549657347
+  /**
+   * setup validation using custom register
+   * see https://github.com/react-hook-form/react-hook-form/issues/404#issuecomment-549657347
+   */
   useEffect(() => {
     entries(defaultValues).forEach(([name, value]: [string, any]) =>
       register({ name, value }, { required: true })
@@ -20,13 +28,13 @@ export function BookForm({ onChange, isValid, initialValues }) {
   isValid(formState.isValid);
 
   const handleValueChange = () => {
-    const updatedValues = getValues();
+    const values = getValues();
     const isFormValid = formState.isValid;
 
     isValid(isFormValid);
 
     if (isFormValid) {
-      onChange({ id, ...updatedValues });
+      onChange({ id, ...values });
     }
   };
 
@@ -74,4 +82,6 @@ export function BookForm({ onChange, isValid, initialValues }) {
       ></TextField>
     </form>
   );
-}
+};
+
+export default BookForm;
