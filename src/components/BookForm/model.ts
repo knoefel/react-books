@@ -1,5 +1,8 @@
+import { ReactText } from "react";
+import BookResource from "../../resources/BookResource";
+
 export interface BookFormProps {
-  onChange: (values: Record<string, any>) => void;
+  onChange: (values: BookResource | Record<string, ReactText | undefined>) => void;
   isValid: (isValid: boolean) => void;
-  initialValues: Record<string, any>;
+  initialValues?: BookResource | Record<string, ReactText | undefined>;
 }

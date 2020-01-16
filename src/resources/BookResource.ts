@@ -1,7 +1,7 @@
 import { CamelCaseResource } from "./CamelResource";
 
 export default class BookResource extends CamelCaseResource {
-  readonly id: number | undefined = undefined;
+  readonly id: string | undefined = undefined;
   readonly title: string = "";
   readonly author: string = "";
   readonly totalAmount: number = 0;

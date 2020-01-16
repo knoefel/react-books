@@ -1,87 +1,78 @@
 import { TextField } from "@material-ui/core";
-import { entries } from "lodash/fp";
-import React, { FC, useEffect } from "react";
+import {
+  entries,
+  isNaN,
+  isNumber,
+  join,
+  pipe,
+  upperFirst,
+  words
+} from "lodash/fp";
+import React, { FC, ReactText, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import BookResource from "../../resources/BookResource";
 import { BookFormProps } from "./model";
 
 const BookForm: FC<BookFormProps> = ({
   onChange,
   isValid,
-  initialValues = {}
+  initialValues = getInitialValues()
 }) => {
-  const { id, ...defaultValues } = initialValues;
-  const { register, formState, getValues } = useForm({
-    defaultValues,
+  const { id, ...initialFormValues } = initialValues;
+  const [formValues, setFormValues] = useState(initialFormValues);
+  const { register, formState, triggerValidation } = useForm({
+    defaultValues: initialFormValues,
     mode: "onChange"
   });
 
-  /**
-   * setup validation using custom register
-   * see https://github.com/react-hook-form/react-hook-form/issues/404#issuecomment-549657347
-   */
-  useEffect(() => {
-    entries(defaultValues).forEach(([name, value]: [string, any]) =>
-      register({ name, value }, { required: true })
-    );
-  }, [register]);
-
   isValid(formState.isValid);
 
-  const handleValueChange = () => {
-    const values = getValues();
+  useEffect(() => {
+    triggerValidation();
+  }, [triggerValidation]);
+
+  const handleValueChange = ({
+    target: { valueAsNumber, value, name }
+  }: React.ChangeEvent<HTMLInputElement>) => {
     const isFormValid = formState.isValid;
+    const editedFormValues = {
+      ...(id ? { id } : {}),
+      ...formValues,
+      [name]: isNaN(valueAsNumber) ? value : valueAsNumber
+    };
 
     isValid(isFormValid);
-
-    if (isFormValid) {
-      onChange({ id, ...values });
-    }
+    setFormValues(editedFormValues);
+    onChange(editedFormValues);
   };
 
   return (
     <form>
-      <TextField
-        onChange={handleValueChange}
-        inputRef={register}
-        label="Title"
-        name="title"
-        type="text"
-        fullWidth
-      ></TextField>
-      <TextField
-        onChange={handleValueChange}
-        inputRef={register}
-        label="Author"
-        name="author"
-        type="text"
-        fullWidth
-      ></TextField>
-      <TextField
-        onChange={handleValueChange}
-        inputRef={register}
-        label="Total Amount"
-        name="totalAmount"
-        type="number"
-        fullWidth
-      ></TextField>
-      <TextField
-        onChange={handleValueChange}
-        inputRef={register}
-        label="Pages"
-        name="pages"
-        type="number"
-        fullWidth
-      ></TextField>
-      <TextField
-        onChange={handleValueChange}
-        inputRef={register}
-        label="ISBN"
-        name="isbn"
-        type="text"
-        fullWidth
-      ></TextField>
+      {entries(initialFormValues).map(([key, value]) => (
+        <TextField
+          onChange={handleValueChange}
+          inputRef={register({ required: true })}
+          label={getLabelFromKey(key)}
+          type={getTypeFromValue(value)}
+          name={key}
+          key={key}
+          fullWidth
+        ></TextField>
+      ))}
     </form>
   );
 };
 
 export default BookForm;
+
+const getInitialValues = (): Record<string, ReactText> => {
+  const { title, author, totalAmount, pages, isbn } = new BookResource();
+
+  return { title, author, totalAmount, pages, isbn };
+};
+
+const joinWithSpace = join(" ");
+const getLabelFromKey = pipe(upperFirst, words, joinWithSpace);
+
+const getTypeFromValue = (value: ReactText) =>
+  isNumber(value) ? "number" : "text";
