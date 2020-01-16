@@ -1,6 +1,7 @@
 import { Fab, makeStyles } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import React, { FC } from "react";
+import { AddButtonProps } from "./model";
 
 const useStyles = makeStyles(theme => ({
   fab: {
@@ -10,7 +11,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const AddButton: FC<{ onClick: () => void }> = ({ onClick }) => {
+const AddButton: FC<AddButtonProps> = ({ onClick }) => {
   const classes = useStyles();
 
   return (
