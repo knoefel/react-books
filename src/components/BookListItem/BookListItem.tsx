@@ -12,11 +12,11 @@ import EditIcon from "@material-ui/icons/Edit";
 import React, { FC } from "react";
 import { BookListItemProps } from "./model";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   listItemText: {
-    paddingRight: "2.5rem"
+    paddingRight: theme.spacing(4)
   }
-});
+}));
 
 const BookListItem: FC<BookListItemProps> = ({
   book,
