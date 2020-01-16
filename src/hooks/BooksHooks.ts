@@ -1,5 +1,5 @@
 import { curryRight, uniq } from "lodash/fp";
-import { useFetcher, useResource } from "rest-hooks";
+import { useFetcher, useResource, useSubscription } from "rest-hooks";
 import BookResource from "../resources/BookResource";
 
 export const useGetAllBooks = () => {
@@ -21,6 +21,9 @@ export const useUpdateBook = () => {
 export const useDeleteBook = () => {
   return useFetcher(BookResource.deleteShape());
 };
+
+export const useBookSubscription = () =>
+  useSubscription(BookResource.listShape(), {});
 
 const updateBookCache = (newBookId: string, bookIds: string[] = []) =>
   uniq([...bookIds, newBookId]);

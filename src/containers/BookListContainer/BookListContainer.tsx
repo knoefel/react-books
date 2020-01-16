@@ -3,6 +3,7 @@ import AddButton from "../../components/AddButton/AddButton";
 import BookList from "../../components/BookList/BookList";
 import CreateBook from "../../components/CreateBook/CreateBook";
 import {
+  useBookSubscription,
   useCreateBook,
   useDeleteBook,
   useGetAllBooks,
@@ -23,6 +24,8 @@ const BookListContainer: FC = () => {
 
     createBook(book, book);
   };
+
+  useBookSubscription();
 
   return (
     <>
