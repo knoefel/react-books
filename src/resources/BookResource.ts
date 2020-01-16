@@ -1,3 +1,4 @@
+import { FetchOptions } from "rest-hooks";
 import { CamelCaseResource } from "./CamelResource";
 
 export default class BookResource extends CamelCaseResource {
@@ -10,6 +11,12 @@ export default class BookResource extends CamelCaseResource {
 
   pk() {
     return this.id;
+  }
+
+  static getFetchOptions(): FetchOptions {
+    return {
+      pollFrequency: 5000 // every 5 seconds
+    };
   }
 
   static urlRoot = "https://5c6eb0534fa1c9001424240b.mockapi.io/api/v1/books";
