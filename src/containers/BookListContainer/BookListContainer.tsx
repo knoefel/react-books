@@ -7,7 +7,7 @@ import {
   useDeleteBook,
   useGetAllBooks,
   useUpdateBook
-} from "../../hooks/BooksHooks";
+} from "../../hooks/books";
 import BookResource from "../../resources/BookResource";
 
 const BookListContainer: FC = () => {
@@ -21,7 +21,7 @@ const BookListContainer: FC = () => {
   const onCreateBook = (book: Partial<BookResource>) => {
     setShowCreateBook(false);
 
-    createBook(book, book);
+    createBook({}, book);
   };
 
   return (
