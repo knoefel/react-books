@@ -18,16 +18,9 @@ const BookList: FC<BookListProps> = ({ books, updateBook, deleteBook }) => {
   };
   const onClickDelete = (book: BookResource) => deleteBook(book);
 
-  const onEdit = (book: BookResource) => {
-    updateBook(book);
-
-    resetState();
-  };
-
-  const resetState = () => {
-    setShowEditBook(false);
-    setEditBook(null);
-  };
+  const onEdit = (book: BookResource) => 
+    updateBook(book).then(() => setShowEditBook(false))
+  ;
 
   return (
     <>
@@ -43,14 +36,12 @@ const BookList: FC<BookListProps> = ({ books, updateBook, deleteBook }) => {
         ))}
       </List>
 
-      {showEditBook && (
-        <EditBook
-          show={showEditBook}
-          book={editBook}
-          onEdit={onEdit}
-          onClose={resetState}
-        ></EditBook>
-      )}
+      <EditBook
+        show={showEditBook}
+        book={editBook}
+        onEdit={onEdit}
+        onClose={() => setShowEditBook(false)}
+      ></EditBook>
     </>
   );
 };

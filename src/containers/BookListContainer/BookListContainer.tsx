@@ -19,11 +19,8 @@ const BookListContainer: FC = () => {
 
   const [showCreateBook, setShowCreateBook] = useState(false);
 
-  const onCreateBook = (book: Partial<BookResource>) => {
-    setShowCreateBook(false);
-
-    createBook({}, book);
-  };
+  const onCreateBook = (book: Partial<BookResource>) =>
+    createBook({}, book).then(() => setShowCreateBook(false));
 
   useBookSubscription();
 

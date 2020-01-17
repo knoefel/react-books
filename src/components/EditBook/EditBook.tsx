@@ -3,15 +3,18 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import BookForm from "../BookForm/BookForm";
 import { EditBookProps } from "./model";
 
 const EditBook: FC<EditBookProps> = ({ show, onEdit, onClose, book }) => {
-  const [updatedBook, setUpdatedBook] = useState(book);
+  const [updatedBook, setUpdatedBook] = useState();
   const [isBookFormValid, setIsBookFormValid] = useState(false);
 
-  const onChange = book => setUpdatedBook(book);
+  useEffect(() => {
+    setUpdatedBook(book);
+  }, [book]);
+
   const onSave = () => onEdit(updatedBook);
 
   return (
@@ -19,7 +22,7 @@ const EditBook: FC<EditBookProps> = ({ show, onEdit, onClose, book }) => {
       <DialogTitle id="edit-book-dialog-title">Edit Book</DialogTitle>
       <DialogContent>
         <BookForm
-          onChange={onChange}
+          onChange={setUpdatedBook}
           initialValues={book}
           isValid={setIsBookFormValid}
         ></BookForm>
